@@ -6,16 +6,11 @@ using System.Threading.Tasks;
 
 namespace ProceduralWorldCreator
 {
-    public class Tile
+    public static class ArrayExtensions
     {
-        public float HeightValue { get; set; }
-        public int X, Y;
-
-        public int? PlateId { get; set; }
-
-        public Tile()
+        public static List<T> AsList<T>(this T[,] array)
         {
-
+            return array.Cast<T>().ToList();
         }
     }
 }

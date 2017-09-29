@@ -8,13 +8,15 @@ namespace ProceduralWorldCreator
 {
     public class MapData
     {
-        public float[,] HeightData;
+        public Tile[,] Tiles;
+
+        // Keep track of min/max for normalization
         public float MinHeight { get; set; }
         public float MaxHeight { get; set; }
 
         public MapData(int width, int height)
         {
-            HeightData = new float[width, height];
+            Tiles = new Tile[width, height];
             MinHeight = float.MaxValue;
             MaxHeight = float.MinValue;
         }

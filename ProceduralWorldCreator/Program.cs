@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,25 +13,47 @@ namespace ProceduralWorldCreator
     {
         static void Main(string[] args)
         {
-            var creator = new WorldCreator()
+            //var creator = new RealWorldCreator()
+            //{
+            //    Height = 100,
+            //    Width = 100,
+            //    NumberOfPlates = 12
+            //};
+
+            //Stopwatch watch = new Stopwatch();
+            //watch.Start();
+            //creator.CreateWorld();
+
+            //watch.Stop();
+            //Console.WriteLine(watch.ElapsedMilliseconds);
+
+            //Bitmap tectonicMap = BitmapGenerator.GetTectonicMap(creator.Width, creator.Height, creator.MapData.Tiles);
+            //BitmapHelpers.ShowBitmap(tectonicMap);
+
+            //Bitmap heightMap = BitmapGenerator.GetHeightMap(creator.Width, creator.Height, creator.MapData.Tiles);
+            //BitmapHelpers.ShowBitmap(heightMap);
+
+            //Bitmap landMap = BitmapGenerator.GetLandMap(creator.Width, creator.Height, creator.MapData);
+            //BitmapHelpers.ShowBitmap(landMap);
+
+            var creator = new NoiseWorldCreator()
             {
-                Height = 100,
-                Width = 100
+                Height = 256,
+                Width = 256,
+                SeaLevel = 0.4f,
+                TerrainFrequency = 1.25, // smaller number means more continents, larger number means lots of clustered islands
+                TerrainOctaves = 6 // defines the "jaggedness" of the land
             };
 
             creator.CreateWorld();
 
-            Bitmap tectonicMap = BitmapGenerator.GetTectonicMap(creator.Width, creator.Height, creator.MapData.Tiles, creator.NumberOfPlates);
+            Bitmap coloredHeightMap = BitmapGenerator.GetColoredHeightMap(creator.Width, creator.Height, creator.MapData);
+            BitmapHelpers.ShowBitmap(coloredHeightMap);
 
-            Form form = new Form();
-            form.Text = "Image Viewer";
-            PictureBox pictureBox = new PictureBox();
-            pictureBox.Image = tectonicMap;
-            pictureBox.Dock = DockStyle.Fill;
-            form.Controls.Add(pictureBox);
-            Application.Run(form);
 
-            var ids = creator.MapData.Tiles.AsList().Select(x => x.PlateId).Distinct();
+            var ids = creator.MapData.Tiles.AsList().Select(x => x.PlateId).Distinct().ToList();
         }
+
+        
     }
 }

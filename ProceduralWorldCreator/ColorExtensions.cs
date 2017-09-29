@@ -18,9 +18,9 @@ namespace ProceduralWorldCreator
         {
             float ratio = (value - lowValue) / (highValue - lowValue);
 
-            int adjR = (int)((highColor.R - lowColor.R) * ratio * 255);
-            int adjG = (int)((highColor.G - lowColor.G) * ratio * 255);
-            int adjB = (int)((highColor.B - lowColor.B) * ratio * 255);
+            int adjR = (int)((highColor.R - lowColor.R) * ratio);
+            int adjG = (int)((highColor.G - lowColor.G) * ratio);
+            int adjB = (int)((highColor.B - lowColor.B) * ratio);
 
             return Color.FromArgb(adjR, adjG, adjB);
         }

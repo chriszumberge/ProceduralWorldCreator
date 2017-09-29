@@ -47,15 +47,28 @@
   <ItemGroup>
     <Compile Include="ArrayExtensions.cs" />
     <Compile Include="BitmapGenerator.cs" />
+    <Compile Include="BitmapHelpers.cs" />
     <Compile Include="ColorExtensions.cs" />
     <Compile Include="MapData.cs" />
+    <Compile Include="MathHelpers.cs" />
+    <Compile Include="NoiseWorldCreator.cs" />
+    <Compile Include="PlateBoundary.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tile.cs" />
+    <Compile Include="TileHelpers.cs" />
+    <Compile Include="MathModels.cs" />
+    <Compile Include="RealWorldCreator.cs" />
     <Compile Include="WorldCreator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AccidentalNoiseLibrary\TinkerWorX.AccidentalNoiseLibrary.csproj">
+      <Project>{e8d255f5-fe68-4720-af02-b1ad7495b322}</Project>
+      <Name>TinkerWorX.AccidentalNoiseLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

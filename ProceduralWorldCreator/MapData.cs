@@ -11,14 +11,18 @@ namespace ProceduralWorldCreator
         public Tile[,] Tiles;
 
         // Keep track of min/max for normalization
-        public float MinHeight { get; set; }
-        public float MaxHeight { get; set; }
+        //public float MinHeight { get; set; }
+        //public float MaxHeight { get; set; }
+
+        public float SeaLevel { get; set; }
 
         public MapData(int width, int height)
         {
             Tiles = new Tile[width, height];
-            MinHeight = float.MaxValue;
-            MaxHeight = float.MinValue;
+            //MinHeight = float.MaxValue;
+            //MaxHeight = float.MinValue;
+
+            SeaLevel = 0.5f;
         }
     }
 }

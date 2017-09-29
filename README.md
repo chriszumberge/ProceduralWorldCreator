@@ -1,5 +1,13 @@
 # ProceduralWorldCreator
 
+Two different types of World Creators.
+
+Real World Creator is a work in progress using actual tectonics and wind patterns to try to generate a realistic world.
+
+Noise World Creator just uses a generated noise pattern as the basis for the world structure and terrain.
+
+
+
 Working with inspiration from
 http://www.jgallant.com/procedurally-generating-wrapping-world-maps-in-unity-csharp-part-1/
 and 

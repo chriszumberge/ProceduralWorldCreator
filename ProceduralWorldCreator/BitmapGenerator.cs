@@ -113,7 +113,7 @@ namespace ProceduralWorldCreator
                 {
                     float value = mapData.Tiles[x, y].HeightValue;
                     // normalize
-                    value = (value - minHeight) / (maxHeight - minHeight);
+                    //value = (value - minHeight) / (maxHeight - minHeight);
 
                     Color color;
                     //if (value <= deepWater)

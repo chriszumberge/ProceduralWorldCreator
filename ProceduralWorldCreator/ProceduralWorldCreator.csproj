@@ -62,6 +62,7 @@
     <Compile Include="MathModels.cs" />
     <Compile Include="RealWorldCreator.cs" />
     <Compile Include="WorldCreator.cs" />
+    <Compile Include="WorldParameters.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

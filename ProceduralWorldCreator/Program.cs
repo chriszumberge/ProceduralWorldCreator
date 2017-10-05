@@ -28,13 +28,16 @@ namespace ProceduralWorldCreator
             Stopwatch watch = new Stopwatch();
             var creator = new NoiseWorldCreator()
             {
+                Seed = 256,
                 Height = 256,
                 Width = 256,
                 // Determined by world moisture?
                 SeaLevel = 0.45f,
                 // Determined by world age?
                 TerrainFrequency = 1.25, // smaller number means more continents, larger number means lots of clustered islands
-                TerrainOctaves = 16 // defines the "jaggedness" of the land.. might have to be proportionate to size
+                TerrainOctaves = 16, // defines the "jaggedness" of the land.. might have to be proportionate to size
+                WorldMoisture = WorldMoisture.Moderate,
+                WorldTemperature = WorldTemperature.Average
             };
 
             string worldId = Guid.NewGuid().ToString();
@@ -69,6 +72,8 @@ namespace ProceduralWorldCreator
 
         private static void CreateSystem()
         {
+            int numWorlds = 7;
+
             string systemId = Guid.NewGuid().ToString().Substring(0, 4);
             string root = AppDomain.CurrentDomain.BaseDirectory;
             Directory.CreateDirectory(Path.Combine(root, $"System_{systemId}"));
@@ -76,12 +81,15 @@ namespace ProceduralWorldCreator
             Random random = new Random();
             Stopwatch watch = new Stopwatch();
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < numWorlds; i++)
             {
                 string worldId = Guid.NewGuid().ToString().Substring(0, 6);
                 var seaLevel = random.NextDouble() * 0.4 + random.NextDouble() * 0.5 + 0.05; // min 0.05, max 0.95, focus of 0.5
                 var terrainFrequency = random.NextDouble() + random.NextDouble() + 0.5; // min 0.5, max 2.5, focus of 1.5
-                var terrainOctaves = random.NextDouble() * 5 + random.NextDouble() * 7 + 5; // min 5, max 17, focus of 11
+                var terrainOctaves = (int)Math.Floor(random.NextDouble() * 5 + random.NextDouble() * 7 + 5); // min 5, max 17, focus of 11
+
+                var worldMoisture = (WorldMoisture)random.Next(0, 5);
+                var worldTemperature = (WorldTemperature)random.Next(0, 5);
 
                 Directory.CreateDirectory(Path.Combine(root, $"System_{systemId}", $"Planet_{worldId}"));
 
@@ -90,10 +98,12 @@ namespace ProceduralWorldCreator
                     Height = 256,
                     Width = 256,
                     // Determined by world moisture?
-                    SeaLevel = 0.45f,
+                    SeaLevel = (float)seaLevel,
                     // Determined by world age?
-                    TerrainFrequency = 1.25, // smaller number means more continents, larger number means lots of clustered islands
-                    TerrainOctaves = 16 // defines the "jaggedness" of the land.. might have to be proportionate to size
+                    TerrainFrequency = terrainFrequency, // smaller number means more continents, larger number means lots of clustered islands
+                    TerrainOctaves = terrainOctaves, // defines the "jaggedness" of the land.. might have to be proportionate to size
+                    WorldMoisture = worldMoisture,
+                    WorldTemperature = worldTemperature
                 };
 
                 watch.Start();
@@ -123,6 +133,8 @@ namespace ProceduralWorldCreator
                     writer.WriteLine($"Sea Level: {seaLevel}");
                     writer.WriteLine($"Terrain Frequency: {terrainFrequency}");
                     writer.WriteLine($"Terrain Octaves: {terrainOctaves}");
+                    writer.WriteLine($"World Temperature: {Enum.GetName(typeof(WorldTemperature), worldTemperature)}");
+                    writer.WriteLine($"World Moisture: {Enum.GetName(typeof(WorldMoisture), worldMoisture)}");
                     writer.WriteLine();
                     writer.WriteLine($"Generation Time: {watch.Elapsed}");
                 }

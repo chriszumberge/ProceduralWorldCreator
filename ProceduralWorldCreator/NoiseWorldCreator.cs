@@ -18,12 +18,43 @@ namespace ProceduralWorldCreator
         public int MoistureOctaves { get; set; } = 4;
         public double MoistureFrequency { get; set; } = 3.0;
 
+        public WorldTemperature WorldTemperature { get; set; } = WorldTemperature.Average;
+        public WorldMoisture WorldMoisture { get; set; } = WorldMoisture.Moderate;
+
+        public int? Seed { get; set; }
+
         public override void CreateWorld()
         {
-            int seed = random.Next(0, Int32.MaxValue);
+            int seed;
+            if (Seed.HasValue)
+                seed = Seed.Value;
+            else
+                seed = random.Next(0, Int32.MaxValue);
+
             //int seed = 256;
             mapData = new MapData(Width, Height);
+
+            // Let world moisture affect sea level
+            if (WorldMoisture == WorldMoisture.VeryDry)
+                SeaLevel /= 2;
+            else if (WorldMoisture == WorldMoisture.Dry)
+                SeaLevel /= 1.5f;
+            else if (WorldMoisture == WorldMoisture.Moderate)
+                SeaLevel /= 1;
+            else if (WorldMoisture == WorldMoisture.Moist)
+                SeaLevel *= 1.2f;
+            else if (WorldMoisture == WorldMoisture.VeryDry)
+                SeaLevel *= 1.5f;
+
+            if (SeaLevel > 1) SeaLevel = 0.95f;
             mapData.SeaLevel = SeaLevel;
+
+            // Update Heat and Moisture Octaves/Frequency
+            MoistureOctaves = (int)(TerrainOctaves * 0.66f);
+            HeatOctaves = (int)(TerrainOctaves * 0.66f);
+            MoistureFrequency = TerrainFrequency;
+            HeatFrequency = TerrainFrequency;
+
 
             float[,] heightMap, heatMap, moistureMap;
             float minHeight, maxHeight, minHeat, maxHeat, minMoisture, maxMoisture;
@@ -812,8 +843,9 @@ namespace ProceduralWorldCreator
         //    }
         //}
 
-        private void LoadTiles(float[,] heightMap, float minHeight, float maxHeight, float[,] heatMap, float minHeat, float maxHeat, 
-            float[,] moistureMap, float minMoisture, float maxMoisture)
+        private void LoadTiles(float[,] heightMap, float minHeight, float maxHeight,
+                               float[,] heatMap, float minHeat, float maxHeat,
+                               float[,] moistureMap, float minMoisture, float maxMoisture)
         {
             for (var x = 0; x < Width; x++)
             {
@@ -829,6 +861,7 @@ namespace ProceduralWorldCreator
 
                     // HEIGHT
                     float heightValue = heightMap[x, y];
+                    // Normalize the height value
                     heightValue = (heightValue - minHeight) / (maxHeight - minHeight);
                     tile.HeightValue = heightValue;
                     if (tile.HeightValue <= sealevel)
@@ -873,7 +906,20 @@ namespace ProceduralWorldCreator
                     }
 
                     float moistureValue = moistureMap[x, y];
+                    // Normalize the moisture value
                     moistureValue = (moistureValue - minMoisture) / (maxMoisture - minMoisture);
+
+                    if (WorldMoisture == WorldMoisture.VeryDry)
+                        moistureValue *= 0.33f;
+                    else if (WorldMoisture == WorldMoisture.Dry)
+                        moistureValue *= 0.66f;
+                    else if (WorldMoisture == WorldMoisture.Moderate)
+                        moistureValue *= 1.0f;
+                    else if (WorldMoisture == WorldMoisture.Moist)
+                        moistureValue = (moistureValue * 0.66f) + 0.33f;
+                    else if (WorldMoisture == WorldMoisture.VeryMoist)
+                        moistureValue = (moistureValue * 0.33f) + 0.66f;
+
                     tile.MoistureValue = moistureValue;
 
                     // HEAT
@@ -897,7 +943,20 @@ namespace ProceduralWorldCreator
 
                     // Set Heat
                     float heatValue = heatMap[x, y];
+                    // Normalize Heat Value
                     heatValue = (heatValue - minHeat) / (maxHeat - minHeat);
+
+                    if (WorldTemperature == WorldTemperature.Frigid)
+                        heatValue *= 0.33f;
+                    else if (WorldTemperature == WorldTemperature.Cold)
+                        heatValue *= 0.66f;
+                    else if (WorldTemperature == WorldTemperature.Average)
+                        heatValue *= 1.0f;
+                    else if (WorldTemperature == WorldTemperature.Warm)
+                        heatValue = (heatValue * 0.66f) + 0.33f;
+                    else if (WorldTemperature == WorldTemperature.Hot)
+                        heatValue = (heatValue * 0.33f) + 0.66f;
+
                     tile.HeatValue = heatValue;
 
                     // TODO assign biomes here?

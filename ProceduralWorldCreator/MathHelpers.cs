@@ -66,5 +66,11 @@ namespace ProceduralWorldCreator
         {
             return (float)((v1.X * v2.Y) + (v1.X * v2.Y));
         }
+
+        public static int Mod(int x, int m)
+        {
+            int r = x % m;
+            return r < 0 ? r + m : r;
+        }
     }
 }

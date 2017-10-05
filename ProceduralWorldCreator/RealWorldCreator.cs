@@ -269,8 +269,8 @@ namespace ProceduralWorldCreator
                 if (boundaryTile.Pressure < -10) boundaryTile.Pressure = -10;
 
                 // TEMPORARY FOR OUTPUT..  normalize pressure to height values
-                //boundaryTile.HeightValue = ((boundaryTile.Pressure + 10) / 20);
-                //boundaryTile.HeightValue = (((boundaryTile.Pressure + 10) / 10) - 0.5f);
+                boundaryTile.HeightValue = ((boundaryTile.Pressure + 10) / 20);
+                boundaryTile.HeightValue = (((boundaryTile.Pressure + 10) / 10) - 0.5f);
             }
 
             //List<float> pressures = boundaryTiles.Select(x => x.Pressure).ToList();

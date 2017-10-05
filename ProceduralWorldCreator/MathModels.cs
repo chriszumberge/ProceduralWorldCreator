@@ -23,6 +23,14 @@ namespace ProceduralWorldCreator
             _second = second;
         }
 
+        public Vector2(Point point)
+        {
+            _first = Point.Zero;
+            _second = point;
+        }
+
+        public Vector2(float x, float y) : this(new Point(x, y)) { }
+
         public float Magnitude => (float)Math.Sqrt(Math.Pow((Second.X - First.X), 2) + Math.Pow((Second.Y - First.Y), 2));
 
         public Vector2 UnitVector => new Vector2(Point.Zero, new Point(X / Magnitude, Y / Magnitude));
@@ -33,6 +41,9 @@ namespace ProceduralWorldCreator
         public static Vector2 operator + (Vector2 v1, Vector2 v2) => new Vector2(
                                                                             new Point(v1.First.X + v2.First.X, v1.First.Y + v2.First.Y), 
                                                                             new Point(v1.Second.X + v2.Second.X, v1.Second.Y + v2.Second.Y));
+        public static Vector2 operator - (Vector2 v1, Vector2 v2) => new Vector2(
+                                                                            new Point(v1.First.X - v2.First.X, v1.First.Y - v2.First.Y),
+                                                                            new Point(v1.Second.X - v2.Second.X, v1.Second.Y - v2.Second.Y));
 
         public static Vector2 Zero => new Vector2(Point.Zero, Point.Zero);
         public static Vector2 Up => new Vector2(Point.Zero, new Point(0, 1));
